@@ -73,15 +73,16 @@ interface PlantScanResult {
 
 interface Product {
   id: string;
+  type: ProductType;
   title: string;
-  type: 'ebook' | 'video';
   author: string;
   cover: string;
-  fileUrl: string;
+  fileUrl?: string;
   duration?: number; // for videos in seconds
   pages?: number; // for ebooks
   isPremium: boolean;
-  previewContent: string;
+  previewContent?: string;
+  previewPages?: number;
   description: string;
   rating: number;
 }
@@ -189,7 +190,9 @@ const mockProducts: Product[] = [
     isPremium: true,
     previewPages: 15,
     description: 'Aprenda tudo sobre cuidados, propagação e identificação de suculentas',
-    rating: 4.8
+    rating: 4.8,
+    type: 'ebook',
+    fileUrl: ''
   },
   {
     id: '2',
@@ -200,7 +203,9 @@ const mockProducts: Product[] = [
     isPremium: true,
     previewPages: 23,
     description: 'Catálogo completo de orquídeas nativas do Brasil com técnicas de cultivo',
-    rating: 4.9
+    rating: 4.9,
+    type: 'ebook',
+    fileUrl: ''
   },
   {
     id: '3',
@@ -211,7 +216,9 @@ const mockProducts: Product[] = [
     isPremium: false,
     previewPages: 128,
     description: 'Transforme pequenos espaços em jardins incríveis',
-    rating: 4.6
+    rating: 4.6,
+    type: 'ebook',
+    fileUrl: ''
   },
   {
     id: '4',
@@ -222,7 +229,8 @@ const mockProducts: Product[] = [
     isPremium: true,
     previewPages: 18,
     description: 'Cultive e use plantas medicinais no seu dia a dia',
-    rating: 4.7
+    rating: 4.7,
+    type: 'ebook'
   },
   {
     id: 'v1',
@@ -273,7 +281,7 @@ const mockEbooks: Ebook[] = mockProducts.filter(p => p.type === 'ebook').map(p =
   cover: p.cover,
   pages: p.pages || 0,
   isPremium: p.isPremium,
-  previewPages: parseInt(p.previewContent),
+  previewPages: p.previewPages ?? (p.previewContent ? parseInt(p.previewContent) : 0),
   description: p.description,
   rating: p.rating
 }));
@@ -692,7 +700,7 @@ export default function PlantCommunityApp() {
     <header className={`sticky top-0 z-50 ${colors.card} border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} shadow-sm`}>
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-purple-600 rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 bg-linear-to-br from-teal-400 to-purple-600 rounded-full flex items-center justify-center">
             <span className="text-white font-bold text-xl">🌿</span>
           </div>
           <h1 className={`text-xl font-bold ${colors.text} ${isChildMode ? 'text-2xl' : ''}`}>
@@ -1037,7 +1045,7 @@ export default function PlantCommunityApp() {
                 <img 
                   src={ebook.cover} 
                   alt={`Cover of ${ebook.title} ebook showing plant illustrations and title text`}
-                  className="w-full aspect-[2/3] object-cover"
+                  className="w-full aspect-2/3 object-cover"
                 />
                 {ebook.isPremium && currentUser?.role !== 'subscriber' && (
                   <div className="absolute top-2 right-2 bg-yellow-500 text-white p-2 rounded-full">
@@ -1157,7 +1165,7 @@ export default function PlantCommunityApp() {
                   <img 
                     src={product.cover} 
                     alt={`${product.title} cover showing educational content about plants`}
-                    className={`w-full ${product.type === 'ebook' ? 'aspect-[2/3]' : 'aspect-video'} object-cover`}
+                    className={`w-full ${product.type === 'ebook' ? 'aspect-2/3' : 'aspect-video'} object-cover`}
                   />
                   {product.type === 'video' && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
@@ -1214,7 +1222,7 @@ export default function PlantCommunityApp() {
           <Card className={`${colors.card} rounded-2xl shadow-sm`}>
             <CardContent className="p-6">
               <div className="flex items-start gap-3 mb-4">
-                <Leaf className={`${colors.primary.replace('bg-', 'text-')} ${isChildMode ? 'w-6 h-6' : 'w-5 h-5'} flex-shrink-0 mt-1`} />
+                <Leaf className={`${colors.primary.replace('bg-', 'text-')} ${isChildMode ? 'w-6 h-6' : 'w-5 h-5'} shrink-0 mt-1`} />
                 <div>
                   <h3 className={`font-semibold ${colors.text} mb-2 ${isChildMode ? 'text-lg' : ''}`}>
                     {isChildMode ? '💡 Dicas para tirar foto' : 'Dicas para um bom scan'}
@@ -1285,7 +1293,7 @@ export default function PlantCommunityApp() {
                   <Card className="bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800 rounded-2xl">
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3">
-                        <AlertCircle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-1" />
+                        <AlertCircle className="w-5 h-5 text-orange-600 shrink-0 mt-1" />
                         <div>
                           <h4 className="font-semibold text-orange-900 dark:text-orange-100 mb-2">
                             {isChildMode ? '⚠️ Foto precisa melhorar' : 'Qualidade da Imagem Insuficiente'}
@@ -1359,7 +1367,7 @@ export default function PlantCommunityApp() {
                     </div>
                   )}
                 </div>
-                <Leaf className={`${colors.primary.replace('bg-', 'text-')} ${isChildMode ? 'w-10 h-10' : 'w-8 h-8'} flex-shrink-0`} />
+                <Leaf className={`${colors.primary.replace('bg-', 'text-')} ${isChildMode ? 'w-10 h-10' : 'w-8 h-8'} shrink-0`} />
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -1669,7 +1677,7 @@ export default function PlantCommunityApp() {
               <X className="w-5 h-5" />
             </Button>
           </div>
-        </CardHeader>
+        </CardHeader>v
         <CardContent className="space-y-4">
           <div className="space-y-3">
             <Input
@@ -1726,7 +1734,7 @@ export default function PlantCommunityApp() {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <Card className={`${colors.card} max-w-lg w-full rounded-3xl shadow-2xl`}>
         <CardHeader className="text-center">
-          <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-20 h-20 bg-linear-to-br from-yellow-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <Crown className="w-10 h-10 text-white" />
           </div>
           <CardTitle className={`${colors.text} ${isChildMode ? 'text-3xl' : 'text-2xl'}`}>
@@ -1758,7 +1766,7 @@ export default function PlantCommunityApp() {
             ))}
           </div>
           
-          <Card className="bg-gradient-to-r from-purple-600 to-teal-500 text-white rounded-2xl border-0">
+          <Card className="bg-linear-to-r from-purple-600 to-teal-500 text-white rounded-2xl border-0">
             <CardContent className="p-6 text-center">
               <div className={`${isChildMode ? 'text-3xl' : 'text-2xl'} font-bold mb-2`}>
                 R$ 19,90<span className={`${isChildMode ? 'text-lg' : 'text-base'} font-normal`}>/mês</span>
@@ -1771,7 +1779,7 @@ export default function PlantCommunityApp() {
           
           <Button
             onClick={handleSubscribe}
-            className={`w-full bg-gradient-to-r from-purple-600 to-teal-500 text-white rounded-full hover:opacity-90 ${isChildMode ? 'h-16 text-xl' : 'h-12'}`}
+            className={`w-full bg-linear-to-r from-purple-600 to-teal-500 text-white rounded-full hover:opacity-90 ${isChildMode ? 'h-16 text-xl' : 'h-12'}`}
           >
             {isChildMode ? '🎉 Começar Grátis' : 'Começar Teste Grátis'}
           </Button>
@@ -1859,7 +1867,7 @@ export default function PlantCommunityApp() {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
         <Card className={`${colors.card} max-w-4xl w-full h-[90vh] rounded-3xl shadow-2xl flex flex-col`}>
-          <CardHeader className="flex-shrink-0">
+          <CardHeader className="shrink-0">
             <div className="flex justify-between items-center">
               <CardTitle className={colors.text}>
                 {showEbookReader.title}
@@ -1884,7 +1892,7 @@ export default function PlantCommunityApp() {
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat...
               </p>
               {currentUser?.role !== 'subscriber' && (
-                <div className="mt-8 p-6 bg-gradient-to-r from-purple-100 to-teal-100 dark:from-purple-900 dark:to-teal-900 rounded-2xl text-center">
+                <div className="mt-8 p-6 bg-linear-to-r from-purple-100 to-teal-100 dark:from-purple-900 dark:to-teal-900 rounded-2xl text-center">
                   <Lock className="w-12 h-12 mx-auto mb-4 text-purple-600" />
                   <h3 className="font-bold text-xl mb-2">Conteúdo Premium</h3>
                   <p className="mb-4">Assine para continuar lendo</p>
@@ -1901,7 +1909,7 @@ export default function PlantCommunityApp() {
               )}
             </div>
           </CardContent>
-          <CardFooter className="flex-shrink-0 flex justify-between items-center border-t">
+          <CardFooter className="shrink-0 flex justify-between items-center border-t">
             <Button variant="ghost" size="sm">
               <ChevronLeft className="w-4 h-4 mr-2" />
               Anterior
