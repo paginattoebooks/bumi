@@ -797,7 +797,7 @@ const BottomTabBar = () => (
     } shadow-lg z-50`}
   >
     <div className="max-w-7xl mx-auto px-4 py-2 flex justify-around">
-      [
+      {[
         { id: 'home' as Tab, icon: Home, label: 'Início' },
         { id: 'explore' as Tab, icon: Search, label: 'Explorar' },
         { id: 'community' as Tab, icon: Users, label: 'Comunidade' },
@@ -836,7 +836,6 @@ const BottomTabBar = () => (
     </div>
   </nav>
 );
-
   const PostCard = ({ post }: { post: Post }) => (
     <Card className={`${colors.card} overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-shadow`}>
       <CardHeader className="pb-3">
