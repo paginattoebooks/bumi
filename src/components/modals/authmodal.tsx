@@ -1,107 +1,120 @@
-"use client";
+'use client';
+import { useState } from 'react';
+import { supabase } from '@/lib/supabaseClient';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 
-import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+type Props = { onClose: () => void };
 
-type AuthModalProps = {
-  open: boolean;
-  onClose: () => void;
-  onLogged?: () => void; // chama quando logado/cadastrado
-};
-
-export default function AuthModal({ open, onClose, onLogged }: AuthModalProps) {
-  const [mode, setMode] = useState<"login" | "signup">("login");
-  const [email, setEmail] = useState("");
-  const [pw, setPw] = useState("");
+export default function AuthModal({ onClose }: Props) {
+  const [mode, setMode] = useState<'login'|'signup'>('login');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState(''); // 6 dígitos
   const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
+  const [err, setErr] = useState<string| null>(null);
 
-  if (!open) return null;
+  const canSubmit = email && password.length >= 6 && password.length <= 6;
 
-  const handleLogin = async () => {
-    setLoading(true); setMsg(null);
-    const { error } = await supabase.auth.signInWithPassword({ email, password: pw });
-    setLoading(false);
-    if (error) return setMsg(error.message);
-    onLogged?.();
-    onClose();
-  };
+  async function handleLogin() {
+    try {
+      setErr(null);
+      setLoading(true);
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      onClose();
+    } catch (e: any) {
+      setErr(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-  const handleSignup = async () => {
-    setLoading(true); setMsg(null);
-    const { error } = await supabase.auth.signUp({ email, password: pw });
-    setLoading(false);
-    if (error) return setMsg(error.message);
-    // Se confirmação de e-mail estiver ativa, o usuário só aparece depois de confirmar.
-    onLogged?.();
-    onClose();
-  };
+  async function handleSignup() {
+    try {
+      setErr(null);
+      setLoading(true);
+      // Requisito: senha exatamente 6 dígitos
+      if (password.length !== 6) throw new Error('A senha deve ter exatamente 6 dígitos.');
+
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: window.location.origin }
+      });
+      if (error) throw error;
+
+      // Cria um esqueleto de profile
+      const userId = data.user?.id;
+      if (userId) {
+        // username provisório baseado no email — você vai permitir mudar depois
+        const usernameSeed = email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '_');
+        await supabase.from('profiles').insert({
+          id: userId,
+          username: usernameSeed,
+          full_name: '',
+          bio: '',
+          avatar_url: '',
+          is_private: false
+        });
+      }
+
+      alert('Conta criada! Verifique seu e-mail (se necessário) e faça login.');
+      setMode('login');
+    } catch (e: any) {
+      setErr(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-black/50">
-      <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
-        <h2 className="mb-4 text-xl font-semibold">
-          {mode === "login" ? "Entrar" : "Criar conta"}
-        </h2>
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="flex items-center justify-between">
+          <CardTitle>{mode === 'login' ? 'Entrar' : 'Criar conta'}</CardTitle>
+          <button onClick={onClose} aria-label="Fechar" className="text-xl">×</button>
+        </CardHeader>
 
-        <label className="mb-2 block text-sm">E-mail</label>
-        <input
-          className="mb-3 w-full rounded-lg border px-3 py-2"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="voce@email.com"
-        />
+        <CardContent className="space-y-3">
+          {err && <p className="text-red-600 text-sm">{err}</p>}
 
-        <label className="mb-2 block text-sm">Senha</label>
-        <input
-          className="mb-4 w-full rounded-lg border px-3 py-2"
-          type="password"
-          value={pw}
-          onChange={(e) => setPw(e.target.value)}
-          placeholder="••••••••"
-        />
+          <Input placeholder="E-mail" value={email} onChange={e=>setEmail(e.target.value)} />
+          <Input
+            placeholder="Senha (6 dígitos)"
+            type="password"
+            value={password}
+            onChange={e=>setPassword(e.target.value)}
+            maxLength={6}
+            minLength={6}
+          />
 
-        {msg && <p className="mb-3 text-sm text-red-600">{msg}</p>}
-
-        <div className="flex gap-2">
-          <button
-            onClick={onClose}
-            className="h-10 flex-1 rounded-lg border px-4"
-            disabled={loading}
-          >
-            Cancelar
-          </button>
-
-          {mode === "login" ? (
-            <button
-              onClick={handleLogin}
-              className="h-10 flex-1 rounded-lg bg-violet-600 px-4 text-white"
-              disabled={loading}
-            >
-              {loading ? "Entrando..." : "Entrar"}
-            </button>
+          {mode === 'login' ? (
+            <Button className="w-full" disabled={!canSubmit || loading} onClick={handleLogin}>
+              {loading ? 'Entrando...' : 'Entrar'}
+            </Button>
           ) : (
-            <button
-              onClick={handleSignup}
-              className="h-10 flex-1 rounded-lg bg-violet-600 px-4 text-white"
-              disabled={loading}
-            >
-              {loading ? "Criando..." : "Criar conta"}
-            </button>
+            <Button className="w-full" disabled={!canSubmit || loading} onClick={handleSignup}>
+              {loading ? 'Criando...' : 'Criar conta'}
+            </Button>
           )}
-        </div>
 
-        <button
-          className="mt-4 w-full text-center text-sm text-violet-700"
-          onClick={() => setMode(mode === "login" ? "signup" : "login")}
-          disabled={loading}
-        >
-          {mode === "login"
-            ? "Não tem conta? Criar conta"
-            : "Já possui conta? Entrar"}
-        </button>
-      </div>
+          <div className="text-center text-sm">
+            {mode === 'login' ? (
+              <button className="underline" onClick={()=>setMode('signup')}>
+                Não tem cadastro? Criar conta
+              </button>
+            ) : (
+              <button className="underline" onClick={()=>setMode('login')}>
+                Já tem cadastro? Entrar
+              </button>
+            )}
+          </div>
+        </CardContent>
+
+        <CardFooter />
+      </Card>
     </div>
   );
 }
+
