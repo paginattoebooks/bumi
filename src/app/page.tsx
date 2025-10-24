@@ -2014,25 +2014,26 @@ export default function PlantCommunityApp() {
   const [showReportModal, setShowReportModal] = useState<Post | null>(null);
   const [posts, setPosts] = useState<Post[]>(mockPosts);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showCreateMenu, setShowCreateMenu] = useState(false);
+  const [showCreatePost, setShowCreatePost] = useState(false);
+  const [showCreateComment, setShowCreateComment] = useState(false);
+  const createMenuRef = useRef<HTMLDivElement | null>(null); // para detectar clique fora
   const [selectedProfile, setSelectedProfile] = useState<User | null>(null);
   const [scanImage, setScanImage] = useState<string | null>(null);
   const [scanResult, setScanResult] = useState<PlantScanResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      const email = data.user?.email;
-      if (email) {
-        setCurrentUser({
-          ...mockUsers[0],
-          name: email,
-          username: email.split('@')[0],
-          role: 'user', // depois mudamos para 'subscriber' após o pagamento
-        });
-      } else {
-        setCurrentUser(null);
-      }
-    });
-  }, []);
+   // Fechar o menu de criação ao clicar fora
+useEffect(() => {
+  function onDocClick(e: MouseEvent) {
+    if (!createMenuRef.current) return;
+    const target = e.target as Node;
+    if (!createMenuRef.current.contains(target)) {
+      setShowCreateMenu(false);
+    }
+  }
+  document.addEventListener('click', onDocClick);
+  return () => document.removeEventListener('click', onDocClick);
+}, []);
 
   // Theme colors
   const colors = {
@@ -2365,49 +2366,106 @@ export default function PlantCommunityApp() {
   };
 
   // Components
-  const Header = () => (
-    <header className={`sticky top-0 z-50 ${colors.card} border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} shadow-sm`}>
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-purple-600 rounded-full flex items-center justify-center">
-            <span className="text-white font-bold text-xl">🌿</span>
-          </div>
-          <h1 className={`text-xl font-bold ${colors.text} ${isChildMode ? 'text-2xl' : ''}`}>
-            PlantHub
-          </h1>
+const Header = () => (
+  <header
+    className={`sticky top-0 z-50 ${colors.card} border-b ${
+      isDarkMode ? 'border-gray-700' : 'border-gray-200'
+    } shadow-sm`}
+  >
+    <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      {/* Esquerda: logo + nome */}
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 bg-linear-to-br from-teal-400 to-purple-600 rounded-full flex items-center justify-center">
+          <span className="text-white font-bold text-xl">🌿</span>
         </div>
-        
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className="rounded-full"
-          >
-            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </Button>
-          
-          {currentUser ? (
-            <>
-              <Button variant="ghost" size="icon" className="rounded-full relative">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </Button>
-              <Avatar className="cursor-pointer" onClick={() => setCurrentTab('profile')}>
-                <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
-                <AvatarFallback>{currentUser.name[0]}</AvatarFallback>
-              </Avatar>
-            </>
-          ) : (
-            <Button onClick={() => setShowAuthModal(true)} className={`${colors.primary} text-white rounded-full`}>
-              {isChildMode ? 'Entrar' : 'Login'}
-            </Button>
-          )}
-        </div>
+        <h1 className={`text-xl font-bold ${colors.text} ${isChildMode ? 'text-2xl' : ''}`}>
+          PlantHub
+        </h1>
       </div>
-    </header>
-  );
 
+      {/* Direita: botões */}
+      <div className="flex items-center gap-2">
+        {/* Modo Claro/Escuro */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          className="rounded-full"
+          aria-label={isDarkMode ? 'Alternar para modo claro' : 'Alternar para modo escuro'}
+        >
+          {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        </Button>
+
+        {currentUser ? (
+          <>
+            {/* Wrapper do botão + e do menu
+                - relative para posicionar o dropdown
+                - onClick stopPropagation para o clique dentro NÃO fechar pelo listener global */}
+            <div
+              ref={createMenuRef}
+              className="relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Botão + (abre/fecha menu) */}
+              <Button
+                aria-label="Criar conteúdo"
+                onClick={() => setShowCreateMenu((v) => !v)}
+                className="rounded-full w-9 h-9 flex items-center justify-center border border-gray-300 hover:bg-gray-50"
+              >
+                +
+              </Button>
+
+              {/* Dropdown do botão + */}
+              {showCreateMenu && (
+                <div
+                  className={`absolute right-0 top-12 z-50 ${
+                    isDarkMode ? 'bg-neutral-900 border-neutral-700' : 'bg-white border-gray-200'
+                  } border rounded-xl shadow-lg w-56 overflow-hidden`}
+                >
+                  <button
+                    className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-neutral-800"
+                    onClick={() => {
+                      setShowCreateMenu(false);
+                      setShowCreatePost(true);
+                    }}
+                  >
+                    Nova postagem (texto/foto)
+                  </button>
+                  <button
+                    className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-neutral-800"
+                    onClick={() => {
+                      setShowCreateMenu(false);
+                      setShowCreateComment(true);
+                    }}
+                  >
+                    Novo comentário
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Notificações */}
+            <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Notificações">
+              <Bell className="w-5 h-5" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </Button>
+
+            {/* Avatar → ir para o perfil */}
+            <Avatar className="cursor-pointer" onClick={() => setCurrentTab('profile')}>
+              <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
+              <AvatarFallback>{currentUser.name?.[0]}</AvatarFallback>
+            </Avatar>
+          </>
+        ) : (
+          // Se NÃO está logado, mostrar botão de entrar/cadastrar
+          <Button onClick={() => setShowAuthModal(true)} className="rounded-full px-4">
+            Entrar / Cadastrar
+          </Button>
+        )}
+      </div>
+    </div>
+  </header>
+);
   const BottomTabBar = () => (
     <nav className={`fixed bottom-0 left-0 right-0 ${colors.card} border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} shadow-lg z-50`}>
       <div className="max-w-7xl mx-auto px-4 py-2 flex justify-around">
@@ -3521,9 +3579,18 @@ export default function PlantCommunityApp() {
             onClick={() => {
               setShowCreatePostModal(false);
               // Add post logic here
+              
             }}
           >
-            {isChildMode ? '✅ Publicar' : 'Publicar'}
+          {showCreatePost && (
+  <CreatePostModal onClose={() => setShowCreatePost(false)} />
+)}
+
+{showCreateComment && (
+  <CreateCommentModal onClose={() => setShowCreateComment(false)} />
+)}
+
+           {isChildMode ? '✅ Publicar' : 'Publicar'}
           </Button>
         </CardContent>
       </Card>
