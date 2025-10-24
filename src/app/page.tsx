@@ -796,35 +796,54 @@ export default function PlantCommunityApp() {
   )}
 </div>
 
- const BottomTabBar = () => (
-    <nav className={`fixed bottom-0 left-0 right-0 ${colors.card} border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} shadow-lg z-50`}>
-      <div className="max-w-7xl mx-auto px-4 py-2 flex justify-around">
-        {[
-          { id: 'home' as Tab, icon: Home, label: 'Início' },
-          { id: 'explore' as Tab, icon: Search, label: 'Explorar' },
-          { id: 'community' as Tab, icon: Users, label: 'Comunidade' },
-          { id: 'scanner' as Tab, icon: Scan, label: 'Scanner' },
-          { id: 'products' as Tab, icon: BookOpen, label: isChildMode ? 'Produtos' : 'Meus Produtos' },
-          { id: 'profile' as Tab, icon: User, label: 'Perfil' }
-        ].map(tab => (
+ // Bottom Navigation — mobile first
+const BottomTabBar = () => (
+  <nav
+    className={`fixed bottom-0 left-0 right-0 ${colors.card} border-t ${
+      isDarkMode ? 'border-gray-700' : 'border-gray-200'
+    } shadow-lg z-50`}
+  >
+    <div className="max-w-7xl mx-auto px-4 py-2 flex justify-around">
+      {[
+        { id: 'home' as Tab, icon: Home, label: 'Início' },
+        { id: 'explore' as Tab, icon: Search, label: 'Explorar' },
+        { id: 'community' as Tab, icon: Users, label: 'Comunidade' },
+        { id: 'scanner' as Tab, icon: Scan, label: 'Scanner' },
+        { id: 'products' as Tab, icon: BookOpen, label: isChildMode ? 'Produtos' : 'Meus Produtos' },
+        { id: 'profile' as Tab, icon: User, label: 'Perfil' },
+      ].map((tab) => {
+        const Icon = tab.icon;
+        const isActive = currentTab === tab.id;
+
+        return (
           <button
             key={tab.id}
             onClick={() => setCurrentTab(tab.id)}
-            className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-all ${
-              currentTab === tab.id 
-                ? `${colors.primary} text-white` 
-                : `${colors.textSecondary} hover:bg-gray-100 dark:hover:bg-gray-700`
-            } ${isChildMode ? 'py-3' : ''}`}
+            className={`flex flex-col items-center justify-center gap-1 px-2 py-1 rounded-lg transition-all duration-150 ${
+              isActive
+                ? `${isDarkMode ? 'text-purple-400' : 'text-purple-600'} font-semibold`
+                : `${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`
+            } hover:scale-105`}
           >
-            <tab.icon className={isChildMode ? 'w-7 h-7' : 'w-5 h-5'} />
-            <span className={`text-xs ${isChildMode ? 'text-base font-semibold' : ''}`}>
-              {tab.label}
-            </span>
+            <Icon
+              className={`w-5 h-5 ${
+                isActive
+                  ? isDarkMode
+                    ? 'text-purple-400'
+                    : 'text-purple-600'
+                  : isDarkMode
+                  ? 'text-gray-400'
+                  : 'text-gray-500'
+              }`}
+            />
+            <span className="text-xs">{tab.label}</span>
           </button>
-        ))}
-      </div>
-    </nav>
-  );
+        );
+      })}
+    </div>
+  </nav>
+);
+
 
   const PostCard = ({ post }: { post: Post }) => (
     <Card className={`${colors.card} overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-shadow`}>
