@@ -736,29 +736,29 @@ const Header = () => (
           size="icon"
           onClick={() => setIsDarkMode(!isDarkMode)}
           className="rounded-full"
+          aria-label="Alternar tema"
         >
           {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </Button>
 
         {currentUser ? (
           <>
-            <Button variant="ghost" size="icon" className="rounded-full relative">
+            {/* Notificações */}
+            <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Notificações">
               <Bell className="w-5 h-5" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
             </Button>
 
+            {/* Avatar → ir para perfil */}
             <Avatar className="cursor-pointer" onClick={() => setCurrentTab('profile')}>
               <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
-              <AvatarFallback>{currentUser.name[0]}</AvatarFallback>
+              <AvatarFallback>{currentUser.name?.[0]}</AvatarFallback>
             </Avatar>
           </>
         ) : (
-          <Button
-            aria-label="Criar"
-            onClick={() => setShowCreateMenu(true)}
-            className="ml-auto rounded-full w-9 h-9 flex items-center justify-center border border-gray-300 hover:bg-gray-50"
-          >
-            +
+          // Se NÃO está logado, mostra Entrar
+          <Button onClick={() => setShowAuthModal(true)} className="rounded-full px-4">
+            Entrar / Cadastrar
           </Button>
         )}
       </div>
@@ -803,11 +803,7 @@ const BottomTabBar = () => (
         { id: 'explore' as Tab, icon: Search, label: 'Explorar' },
         { id: 'community' as Tab, icon: Users, label: 'Comunidade' },
         { id: 'scanner' as Tab, icon: Scan, label: 'Scanner' },
-        {
-          id: 'products' as Tab,
-          icon: BookOpen,
-          label: isChildMode ? 'Produtos' : 'Meus Produtos',
-        },
+        { id: 'products' as Tab, icon: BookOpen, label: isChildMode ? 'Produtos' : 'Meus Produtos' },
         { id: 'profile' as Tab, icon: User, label: 'Perfil' },
       ].map((tab) => {
         const Icon = tab.icon;
@@ -841,7 +837,6 @@ const BottomTabBar = () => (
     </div>
   </nav>
 );
-
   const PostCard = ({ post }: { post: Post }) => (
     <Card className={`${colors.card} overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-shadow`}>
       <CardHeader className="pb-3">
