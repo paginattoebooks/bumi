@@ -793,9 +793,11 @@ const Header = () => (
 // Bottom Navigation — mobile first
 const BottomTabBar = () => (
   <nav
-    className={`fixed bottom-0 left-0 right-0 ${colors.card} border-t ${
-      isDarkMode ? 'border-gray-700' : 'border-gray-200'
-    } shadow-lg z-50`}
+   className={`flex flex-col items-center justify-center gap-1 px-2 py-1 rounded-lg transition-all duration-300 ${
+       isActive
+       ? `${isDarkMode ? 'text-purple-400' : 'text-purple-600'} font-semibold`
+       : `${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`
+   }`}
   >
     <div className="max-w-7xl mx-auto px-4 py-2 flex justify-around">
       {[
@@ -811,14 +813,14 @@ const BottomTabBar = () => (
 
         return (
           <button
-            key={tab.id}
-            onClick={() => setCurrentTab(tab.id)}
-            className={`flex flex-col items-center justify-center gap-1 px-2 py-1 rounded-lg transition-all duration-150 ${
+             key={tab.id}
+             onClick={() => setCurrentTab(tab.id)}
+             className={`flex flex-col items-center justify-center gap-1 px-2 py-1 rounded-lg transition-all duration-300 ${
               isActive
-                ? `${isDarkMode ? 'text-purple-400' : 'text-purple-600'} font-semibold`
-                : `${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`
-            } hover:scale-105`}
-          >
+                  ? `${isDarkMode ? 'text-purple-400' : 'text-purple-600'} font-semibold`
+                  : `${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`
+  }`}
+>
             <Icon
               className={`w-5 h-5 ${
                 isActive
