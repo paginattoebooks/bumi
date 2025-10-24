@@ -714,64 +714,58 @@ export default function PlantCommunityApp() {
   };
 
   // Components
-  const Header = () => (
-    <header className={`sticky top-0 z-50 ${colors.card} border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} shadow-sm`}>
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-linear-to-br from-teal-400 to-purple-600 rounded-full flex items-center justify-center">
-            <span className="text-white font-bold text-xl">🌿</span>
-          </div>
-          <h1 className={`text-xl font-bold ${colors.text} ${isChildMode ? 'text-2xl' : ''}`}>
-            PlantHub
-          </h1>
-        </div>
-        
-        <div className="flex items-center gap-2 relative">
-  {/* Dark mode */}
-  <Button
-    variant="ghost"
-    size="icon"
-    onClick={() => setIsDarkMode(!isDarkMode)}
-    className="rounded-full"
-    aria-label={isDarkMode ? 'Alternar para modo claro' : 'Alternar para modo escuro'}
+const Header = () => (
+  <header
+    className={`sticky top-0 z-50 ${colors.card} border-b ${
+      isDarkMode ? 'border-gray-700' : 'border-gray-200'
+    } shadow-sm`}
   >
-    {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-  </Button>
-
-  {currentUser ? (
-    <>
-      {/* Botão + para criar */}
-      <Button
-        aria-label="Criar conteúdo"
-        onClick={() => setShowCreateMenu((v) => !v)}
-        className="rounded-full w-9 h-9 flex items-center justify-center border border-gray-300 hover:bg-gray-50"
-      >
-        +
-      </Button>
-
-      {/* Menu do botão + */}
-      {showCreateMenu && (
-        <div className={`absolute right-0 top-12 z-50 ${isDarkMode ? 'bg-neutral-900 border-neutral-700' : 'bg-white border-gray-200'} border rounded-xl shadow-lg w-56`}>
-          <button
-            className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-neutral-800"
-            onClick={() => {
-              setShowCreateMenu(false);
-              setShowCreatePost(true);
-            }}
-          >
-            Nova postagem (texto/foto)
-          </button>
-          <button
-            className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-neutral-800"
-            onClick={() => {
-              setShowCreateMenu(false);
-              setShowCreateComment(true);
-            }}
-          >
-            Novo comentário
-          </button>
+    <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 bg-linear-to-br from-teal-400 to-purple-600 rounded-full flex items-center justify-center">
+          <span className="text-white font-bold text-xl">🌿</span>
         </div>
-      )}
+        <h1 className={`text-xl font-bold ${colors.text} ${isChildMode ? 'text-2xl' : ''}`}>
+          PlantHub
+        </h1>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          className="rounded-full"
+        >
+          {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        </Button>
+
+        {currentUser ? (
+          <>
+            <Button variant="ghost" size="icon" className="rounded-full relative">
+              <Bell className="w-5 h-5" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+            </Button>
+            <Avatar className="cursor-pointer" onClick={() => setCurrentTab('profile')}>
+              <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
+              <AvatarFallback>{currentUser.name[0]}</AvatarFallback>
+            </Avatar>
+          </>
+        ) : (
+          // Botão “+” para abrir menu de criação (mostra quando NÃO logado;
+          // se quiser mostrar sempre, mova para fora do ternário)
+          <Button
+            aria-label="Criar"
+            onClick={() => setShowCreateMenu(true)}
+            className="ml-auto rounded-full w-9 h-9 flex items-center justify-center border border-gray-300 hover:bg-gray-50"
+          >
+            +
+          </Button>
+        )}
+      </div>
+    </div>
+  </header>
+);
 
       {/* Notificações */}
       <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Notificações">
@@ -796,7 +790,7 @@ export default function PlantCommunityApp() {
   )}
 </div>
 
- // Bottom Navigation — mobile first
+// Bottom Navigation — mobile first
 const BottomTabBar = () => (
   <nav
     className={`fixed bottom-0 left-0 right-0 ${colors.card} border-t ${
@@ -843,7 +837,6 @@ const BottomTabBar = () => (
     </div>
   </nav>
 );
-
 
   const PostCard = ({ post }: { post: Post }) => (
     <Card className={`${colors.card} overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-shadow`}>
