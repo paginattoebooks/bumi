@@ -766,7 +766,6 @@ const Header = () => (
     </div>
   </header>
 );
-
       {/* Notificações */}
       <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Notificações">
         <Bell className="w-5 h-5" />
