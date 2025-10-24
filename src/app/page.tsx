@@ -786,7 +786,9 @@ const Header = () => (
       Entrar / Cadastrar
     </Button>
   )}
-</div>
+  </div>
+  </header>
+);
 
 // Bottom Navigation — mobile first
 const BottomTabBar = () => (
