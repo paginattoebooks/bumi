@@ -746,14 +746,13 @@ const Header = () => (
               <Bell className="w-5 h-5" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
             </Button>
+
             <Avatar className="cursor-pointer" onClick={() => setCurrentTab('profile')}>
               <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
               <AvatarFallback>{currentUser.name[0]}</AvatarFallback>
             </Avatar>
           </>
         ) : (
-          // Botão “+” para abrir menu de criação (mostra quando NÃO logado;
-          // se quiser mostrar sempre, mova para fora do ternário)
           <Button
             aria-label="Criar"
             onClick={() => setShowCreateMenu(true)}
@@ -802,7 +801,11 @@ const BottomTabBar = () => (
         { id: 'explore' as Tab, icon: Search, label: 'Explorar' },
         { id: 'community' as Tab, icon: Users, label: 'Comunidade' },
         { id: 'scanner' as Tab, icon: Scan, label: 'Scanner' },
-        { id: 'products' as Tab, icon: BookOpen, label: isChildMode ? 'Produtos' : 'Meus Produtos' },
+        {
+          id: 'products' as Tab,
+          icon: BookOpen,
+          label: isChildMode ? 'Produtos' : 'Meus Produtos',
+        },
         { id: 'profile' as Tab, icon: User, label: 'Perfil' },
       ].map((tab) => {
         const Icon = tab.icon;
@@ -836,6 +839,7 @@ const BottomTabBar = () => (
     </div>
   </nav>
 );
+
   const PostCard = ({ post }: { post: Post }) => (
     <Card className={`${colors.card} overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-shadow`}>
       <CardHeader className="pb-3">
