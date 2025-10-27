@@ -713,7 +713,7 @@ export default function PlantCommunityApp() {
     setScanResult(null);
   };
 
-// Header — versão corrigida
+// Header — versão corrigida e completa
 const Header = () => (
   <header
     className={`sticky top-0 z-50 ${colors.card} border-b ${
@@ -731,7 +731,7 @@ const Header = () => (
         </h1>
       </div>
 
-      {/* Ações à direita */}
+      {/* Ações no canto direito */}
       <div className="flex items-center gap-2">
         {/* Alternar tema */}
         <Button
@@ -744,7 +744,6 @@ const Header = () => (
           {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </Button>
 
-        {/* Autenticado: sininho + avatar | Visitante: Entrar/Cadastrar */}
         {currentUser ? (
           <>
             {/* Notificações */}
@@ -758,7 +757,7 @@ const Header = () => (
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
             </Button>
 
-            {/* Avatar → perfil */}
+            {/* Avatar → Perfil */}
             <Avatar className="cursor-pointer" onClick={() => setCurrentTab('profile')}>
               <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
               <AvatarFallback>{currentUser.name?.[0]}</AvatarFallback>
@@ -773,6 +772,7 @@ const Header = () => (
     </div>
   </header>
 );
+
 
 // Bottom Navigation — mobile first
 const BottomTabBar: React.FC = () => {
@@ -3712,10 +3712,10 @@ const Header = () => (
     );
   };
 
-  return (
+    return (
     <div className={`min-h-screen ${colors.background} ${colors.text} transition-colors`}>
       <Header />
-      
+
       <main className="max-w-7xl mx-auto px-4 py-6">
         {currentTab === 'home' && <HomeTab />}
         {currentTab === 'explore' && <ExploreTab />}
@@ -3724,9 +3724,9 @@ const Header = () => (
         {currentTab === 'products' && <ProductsTab />}
         {currentTab === 'profile' && <ProfileTab />}
       </main>
-      
+
       <BottomTabBar />
-      
+
       {showAuthModal && <AuthModal />}
       {showPaywallModal && <PaywallModal />}
       {showCreatePostModal && <CreatePostModal />}
@@ -3734,4 +3734,5 @@ const Header = () => (
       {showReportModal && <ReportModal />}
     </div>
   );
- }   
+} 
+
