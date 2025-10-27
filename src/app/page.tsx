@@ -791,54 +791,48 @@ const Header = () => (
 );
 
 // Bottom Navigation — mobile first
-const BottomTabBar = () => (
-  <nav
-   className={`flex flex-col items-center justify-center gap-1 px-2 py-1 rounded-lg transition-all duration-300 ${
-       isActive
-       ? `${isDarkMode ? 'text-purple-400' : 'text-purple-600'} font-semibold`
-       : `${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`
-   }`}
-  >
-    <div className="max-w-7xl mx-auto px-4 py-2 flex justify-around">
-      {[
-        { id: 'home' as Tab, icon: Home, label: 'Início' },
-        { id: 'explore' as Tab, icon: Search, label: 'Explorar' },
-        { id: 'community' as Tab, icon: Users, label: 'Comunidade' },
-        { id: 'scanner' as Tab, icon: Scan, label: 'Scanner' },
-        { id: 'products' as Tab, icon: BookOpen, label: isChildMode ? 'Produtos' : 'Meus Produtos' },
-        { id: 'profile' as Tab, icon: User, label: 'Perfil' },
-      ].map((tab) => {
-        const Icon = tab.icon;
-        const isActive = currentTab === tab.id;
+const BottomTabBar: React.FC = () => {
+  return (
+    <nav
+      className={`fixed bottom-0 left-0 right-0 ${colors.card} border-t ${
+        isDarkMode ? 'border-gray-700' : 'border-gray-200'
+      } shadow-lg z-50`}
+    >
+      <div className="max-w-7xl mx-auto px-4 py-2 flex justify-around">
+        {[
+          { id: 'home' as Tab, icon: Home, label: 'Início' },
+          { id: 'explore' as Tab, icon: Search, label: 'Explorar' },
+          { id: 'community' as Tab, icon: Users, label: 'Comunidade' },
+          { id: 'scanner' as Tab, icon: Scan, label: 'Scanner' },
+          {
+            id: 'products' as Tab,
+            icon: BookOpen,
+            label: isChildMode ? 'Produtos' : 'Meus Produtos',
+          },
+          { id: 'profile' as Tab, icon: User, label: 'Perfil' },
+        ].map((tab) => {
+          const Icon = tab.icon;
+          const isActive = currentTab === tab.id;
 
-        return (
-          <button
-             key={tab.id}
-             onClick={() => setCurrentTab(tab.id)}
-             className={`flex flex-col items-center justify-center gap-1 px-2 py-1 rounded-lg transition-all duration-300 ${
-              isActive
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setCurrentTab(tab.id)}
+              className={`flex flex-col items-center justify-center gap-1 px-2 py-1 rounded-lg transition-all duration-150 ${
+                isActive
                   ? `${isDarkMode ? 'text-purple-400' : 'text-purple-600'} font-semibold`
                   : `${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`
-  }`}
->
-            <Icon
-              className={`w-5 h-5 ${
-                isActive
-                  ? isDarkMode
-                    ? 'text-purple-400'
-                    : 'text-purple-600'
-                  : isDarkMode
-                  ? 'text-gray-400'
-                  : 'text-gray-500'
-              }`}
-            />
-            <span className="text-xs">{tab.label}</span>
-          </button>
-        );
-      })}
-    </div>
-  </nav>
-);
+              } hover:scale-105`}
+            >
+              <Icon className="w-5 h-5" />
+              <span className="text-xs">{tab.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </nav>
+  );
+};
   const PostCard = ({ post }: { post: Post }) => (
     <Card className={`${colors.card} overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-shadow`}>
       <CardHeader className="pb-3">
