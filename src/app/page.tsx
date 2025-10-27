@@ -449,11 +449,12 @@ const PlantCommunityApp: React.FC = () => {
 
   // Image Quality Check
   const checkImageQuality = async (imageDataUrl: string): Promise<ImageQuality> => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+  return new Promise((resolve) => {
+    const img = new Image();
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
         
         if (!ctx) {
           resolve({
