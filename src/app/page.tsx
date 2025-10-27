@@ -714,65 +714,66 @@ export default function PlantCommunityApp() {
   };
 
 // Header — versão corrigida e completa
-const Header = () => (
-  <header
-    className={`sticky top-0 z-50 ${colors.card} border-b ${
-      isDarkMode ? 'border-gray-700' : 'border-gray-200'
-    } shadow-sm`}
-  >
-    <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-      {/* Logo + título */}
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 bg-linear-to-br from-teal-400 to-purple-600 rounded-full flex items-center justify-center">
-          <span className="text-white font-bold text-xl">🌿</span>
+const Header: React.FC = () => {
+  return (
+    <header
+      className={`sticky top-0 z-50 ${colors.card} border-b ${
+        isDarkMode ? 'border-gray-700' : 'border-gray-200'
+      } shadow-sm`}
+    >
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        {/* Logo + título */}
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-purple-600 rounded-full flex items-center justify-center">
+            <span className="text-white font-bold text-xl">🌿</span>
+          </div>
+          <h1 className={`text-xl font-bold ${colors.text} ${isChildMode ? 'text-2xl' : ''}`}>
+            PlantHub
+          </h1>
         </div>
-        <h1 className={`text-xl font-bold ${colors.text} ${isChildMode ? 'text-2xl' : ''}`}>
-          PlantHub
-        </h1>
-      </div>
 
-      {/* Ações no canto direito */}
-      <div className="flex items-center gap-2">
-        {/* Alternar tema */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          className="rounded-full"
-          aria-label="Alternar tema"
-        >
-          {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-        </Button>
-
-        {currentUser ? (
-          <>
-            {/* Notificações */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full relative"
-              aria-label="Notificações"
-            >
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
-            </Button>
-
-            {/* Avatar → Perfil */}
-            <Avatar className="cursor-pointer" onClick={() => setCurrentTab('profile')}>
-              <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
-              <AvatarFallback>{currentUser.name?.[0]}</AvatarFallback>
-            </Avatar>
-          </>
-        ) : (
-          <Button onClick={() => setShowAuthModal(true)} className="rounded-full px-4">
-            Entrar / Cadastrar
+        {/* Ações no canto direito */}
+        <div className="flex items-center gap-2">
+          {/* Alternar tema */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className="rounded-full"
+          >
+            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </Button>
-        )}
-      </div>
-    </div>
-  </header>
-);
 
+          {/* Se está logado → sininho + avatar. Senão → Entrar/Cadastrar */}
+          {currentUser ? (
+            <>
+              {/* Notificações */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full relative"
+                aria-label="Notificações"
+              >
+                <Bell className="w-5 h-5" />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+              </Button>
+
+              {/* Avatar → ir para perfil */}
+              <Avatar className="cursor-pointer" onClick={() => setCurrentTab('profile')}>
+                <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
+                <AvatarFallback>{currentUser.name?.[0]}</AvatarFallback>
+              </Avatar>
+            </>
+          ) : (
+            <Button onClick={() => setShowAuthModal(true)} className="rounded-full px-4">
+              Entrar / Cadastrar
+            </Button>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+};
 
 // Bottom Navigation — mobile first
 const BottomTabBar: React.FC = () => {
@@ -3712,7 +3713,7 @@ const Header = () => (
     );
   };
 
-    return (
+     return (
     <div className={`min-h-screen ${colors.background} ${colors.text} transition-colors`}>
       <Header />
 
@@ -3733,6 +3734,6 @@ const Header = () => (
       {showEbookReader && <EbookReaderModal />}
       {showReportModal && <ReportModal />}
     </div>
-  );
-} 
+    );
+}
 
