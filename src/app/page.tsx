@@ -3685,7 +3685,7 @@ const Header = () => (
                 { label: isChildMode ? '🔞 Não é para crianças' : 'Conteúdo adulto' }
               ].map((reason, i) => (
                 <Button
-                  key={i}
+                  key{i}
                   variant="outline"
                   className={`w-full justify-start rounded-full hover:bg-red-50 dark:hover:bg-red-900 ${isChildMode ? 'h-14 text-lg' : ''}`}
                 >
@@ -3712,29 +3712,29 @@ const Header = () => (
     );
   };
 
-        // === Saída do componente ===
-  return (
-    <div className={`min-h-screen ${colors.background} ${colors.text} transition-colors`}>
-      <Header />
+      // === Saída do componente ===
+return (
+  <div className={`min-h-screen ${colors.background} ${colors.text} transition-colors`}>
+    <Header />
 
-      <main className="max-w-7xl mx-auto px-4 py-6">
-        {currentTab === 'home' && <HomeTab />}
-        {currentTab === 'explore' && <ExploreTab />}
-        {currentTab === 'community' && <CommunityTab />}
-        {currentTab === 'scanner' && <ScannerTab />}
-        {currentTab === 'products' && <ProductsTab />}
-        {currentTab === 'profile' && <ProfileTab />}
-      </main>
+    <main className="max-w-7xl mx-auto px-4 py-6">
+      {currentTab === 'home' && <HomeTab />}
+      {currentTab === 'explore' && <ExploreTab />}
+      {currentTab === 'community' && <CommunityTab />}
+      {currentTab === 'scanner' && <ScannerTab />}
+      {currentTab === 'products' && <ProductsTab />}
+      {currentTab === 'profile' && <ProfileTab />}
+    </main>
 
-      <BottomTabBar />
+    <BottomTabBar />
 
-      {showAuthModal && <AuthModal />}
-      {showPaywallModal && <PaywallModal />}
-      {showCreatePostModal && <CreatePostModal />}
-      {showEbookReaderModal && <EbookReaderModal />}
-      {showReportModal && <ReportModal />}
-    </div>
-  );
-}; 
+    {showAuthModal && <AuthModal />}
+    {showPaywallModal && <PaywallModal />}
+    {showCreatePostModal && <CreatePostModal />}
+    {showEbookReaderModal && <EbookReaderModal />}
+    {showReportModal && <ReportModal />}
+  </div>
+);
+}; // fecha o componente (arrow function)
 
 export default PlantCommunityApp;
