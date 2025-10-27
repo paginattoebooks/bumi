@@ -3713,27 +3713,29 @@ const Header = () => (
     );
   };
 
-        return (
-    <div className={`min-h-screen ${colors.background} ${colors.text} transition-colors`}>
-      <Header />
+        // ==== RENDER ====
+return (
+  <div className={`min-h-screen ${colors.background} ${colors.text} transition-colors`}>
+    <Header />
 
-      <main className="max-w-7xl mx-auto px-4 py-6">
-        {currentTab === 'home' && <HomeTab />}
-        {currentTab === 'explore' && <ExploreTab />}
-        {currentTab === 'community' && <CommunityTab />}
-        {currentTab === 'scanner' && <ScannerTab />}
-        {currentTab === 'products' && <ProductsTab />}
-        {currentTab === 'profile' && <ProfileTab />}
-      </main>
+    <main className="max-w-7xl mx-auto px-4 py-6">
+      {currentTab === 'home' && <HomeTab />}
+      {currentTab === 'explore' && <ExploreTab />}
+      {currentTab === 'community' && <CommunityTab />}
+      {currentTab === 'scanner' && <ScannerTab />}
+      {currentTab === 'products' && <ProductsTab />}
+      {currentTab === 'profile' && <ProfileTab />}
+    </main>
 
-      <BottomTabBar />
+    <BottomTabBar />
 
-      {showAuthModal && <AuthModal />}
-      {showPaywallModal && <PaywallModal />}
-      {showCreatePostModal && <CreatePostModal />}
-      {showEbookReader && <EbookReaderModal />}
-      {showReportModal && <ReportModal />}
-    </div>
-       );
-}
+    {showAuthModal && <AuthModal />}
+    {showPaywallModal && <PaywallModal />}
+    {showCreatePostModal && <CreatePostModal />}
+    {showEbookReader && <EbookReaderModal />}
+    {showReportModal && <ReportModal />}
+  </div>
+);                   // ⬅️ fecha o JSX do return
+}                     // ⬅️ fecha a função export default PlantCommunityApp
+
 
