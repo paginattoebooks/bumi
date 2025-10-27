@@ -3713,5 +3713,25 @@ const Header = () => (
     );
   };
 
-     return <div />;
+       return (
+    <div className={`min-h-screen ${colors.background} ${colors.text} transition-colors`}>
+      <Header />
+      <main className="max-w-7xl mx-auto px-4 py-6">
+        {currentTab === 'home' && <HomeTab />}
+        {currentTab === 'explore' && <ExploreTab />}
+        {currentTab === 'community' && <CommunityTab />}
+        {currentTab === 'scanner' && <ScannerTab />}
+        {currentTab === 'products' && <ProductsTab />}
+        {currentTab === 'profile' && <ProfileTab />}
+      </main>
+      <BottomTabBar />
+      {showAuthModal && <AuthModal />}
+      {showPaywallModal && <PaywallModal />}
+      {showCreatePostModal && <CreatePostModal />}
+      {showEbookReader && <EbookReaderModal />}
+      {showReportModal && <ReportModal />}
+    </div>
+  );
+};
 
+export default PlantCommunityApp;
