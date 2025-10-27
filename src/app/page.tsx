@@ -758,7 +758,7 @@ const Header: React.FC = () => {
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
               </Button>
 
-              {/* Avatar → ir para perfil */}
+             {/* Avatar → ir para perfil */}
               <Avatar className="cursor-pointer" onClick={() => setCurrentTab('profile')}>
                 <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
                 <AvatarFallback>{currentUser.name?.[0]}</AvatarFallback>
@@ -3713,7 +3713,7 @@ const Header = () => (
     );
   };
 
-     return (
+      return (
     <div className={`min-h-screen ${colors.background} ${colors.text} transition-colors`}>
       <Header />
 
@@ -3734,6 +3734,6 @@ const Header = () => (
       {showEbookReader && <EbookReaderModal />}
       {showReportModal && <ReportModal />}
     </div>
-    );
+      );
 }
 
