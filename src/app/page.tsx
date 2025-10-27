@@ -354,7 +354,7 @@ function AuthForm({ onClose, onLogged }: { onClose: () => void; onLogged: () => 
   );
 }
 
-cconst PlantCommunityApp: React.FC = () => {
+const PlantCommunityApp: React.FC = () => {
   // State Management
   const [currentTab, setCurrentTab] = useState<Tab>('home');
   const [currentUser, setCurrentUser] = useState<any>(null);
