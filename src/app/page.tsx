@@ -713,7 +713,7 @@ export default function PlantCommunityApp() {
     setScanResult(null);
   };
 
-  // Header — corrigido (sem "</>" perdido)
+// Header — versão corrigida
 const Header = () => (
   <header
     className={`sticky top-0 z-50 ${colors.card} border-b ${
@@ -731,7 +731,7 @@ const Header = () => (
         </h1>
       </div>
 
-      {/* Ações do lado direito */}
+      {/* Ações à direita */}
       <div className="flex items-center gap-2">
         {/* Alternar tema */}
         <Button
@@ -739,20 +739,26 @@ const Header = () => (
           size="icon"
           onClick={() => setIsDarkMode(!isDarkMode)}
           className="rounded-full"
+          aria-label="Alternar tema"
         >
           {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </Button>
 
-        {/* Se está logado → sininho + avatar. Senão → botão Entrar/Cadastrar */}
+        {/* Autenticado: sininho + avatar | Visitante: Entrar/Cadastrar */}
         {currentUser ? (
           <>
             {/* Notificações */}
-            <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Notificações">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full relative"
+              aria-label="Notificações"
+            >
               <Bell className="w-5 h-5" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
             </Button>
 
-            {/* Avatar → ir para perfil */}
+            {/* Avatar → perfil */}
             <Avatar className="cursor-pointer" onClick={() => setCurrentTab('profile')}>
               <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
               <AvatarFallback>{currentUser.name?.[0]}</AvatarFallback>
@@ -765,30 +771,6 @@ const Header = () => (
         )}
       </div>
     </div>
-  </header>
-);
-      {/* Notificações */}
-      <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Notificações">
-        <Bell className="w-5 h-5" />
-        <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-      </Button>
-
-      {/* Avatar → ir para perfil */}
-      <Avatar className="cursor-pointer" onClick={() => setCurrentTab('profile')}>
-        <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
-        <AvatarFallback>{currentUser.name?.[0]}</AvatarFallback>
-      </Avatar>
-    </>
-  ) : (
-    // Se NÃO está logado, mostra Entrar
-    <Button
-      onClick={() => setShowAuthModal(true)}
-      className="rounded-full px-4"
-    >
-      Entrar / Cadastrar
-    </Button>
-  )}
-  </div>
   </header>
 );
 
