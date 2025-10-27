@@ -3735,6 +3735,6 @@ const Header = () => (
       {showReportModal && <ReportModal />}
     </div>
   );
-}; // fecha o componente (arrow function)
+}; 
 
 export default PlantCommunityApp;
