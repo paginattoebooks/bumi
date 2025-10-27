@@ -355,7 +355,7 @@ function AuthForm({ onClose, onLogged }: { onClose: () => void; onLogged: () => 
 }
 
 
-export default function PlantCommunityApp() {
+const PlantCommunityApp: React.FC = () => {
   // State Management
   const [currentTab, setCurrentTab] = useState<Tab>('home');
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -3735,7 +3735,8 @@ return (
     {showEbookReader && <EbookReaderModal />}
     {showReportModal && <ReportModal />}
   </div>
-);                   // ⬅️ fecha o JSX do return
-}                     // ⬅️ fecha a função export default PlantCommunityApp
+);
 
-
+// fecha o componente (AGORA como arrow function)
+};
+export default PlantCommunityApp;
