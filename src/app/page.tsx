@@ -3713,29 +3713,5 @@ const Header = () => (
     );
   };
 
-      // === Saída do componente ===
-return (
-  <div className={`min-h-screen ${colors.background} ${colors.text} transition-colors`}>
-    <Header />
+     return <div />;
 
-    <main className="max-w-7xl mx-auto px-4 py-6">
-      {currentTab === 'home' && <HomeTab />}
-      {currentTab === 'explore' && <ExploreTab />}
-      {currentTab === 'community' && <CommunityTab />}
-      {currentTab === 'scanner' && <ScannerTab />}
-      {currentTab === 'products' && <ProductsTab />}
-      {currentTab === 'profile' && <ProfileTab />}
-    </main>
-
-    <BottomTabBar />
-
-    {showAuthModal && <AuthModal />}
-    {showPaywallModal && <PaywallModal />}
-    {showCreatePostModal && <CreatePostModal />}
-    {showEbookReaderModal && <EbookReaderModal />}
-    {showReportModal && <ReportModal />}
-  </div>
-);
-}; // fecha o componente (arrow function)
-
-export default PlantCommunityApp;
