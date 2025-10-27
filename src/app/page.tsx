@@ -3678,18 +3678,18 @@ const Header = () => (
             </p>
             <div className="space-y-2">
               {[
-                 { label: isChildMode ? '😢 Conteúdo triste' : 'Conteúdo inapropriado' },
-                 { label: isChildMode ? '🚫 Assédio' : 'Assédio ou bullying' },
-                 { label: isChildMode ? '❌ Spam' : 'Spam ou publicidade' },
-                 { label: isChildMode ? 'ℹ️ Informação errada' : 'Informação falsa' },
-                 { label: isChildMode ? '🚷 Não é para crianças' : 'Conteúdo adulto' },
+                  { label: isChildMode ? '😢 Conteúdo triste' : 'Conteúdo inapropriado' },
+                  { label: isChildMode ? '🚫 Assédio' : 'Assédio ou bullying' },
+                  { label: isChildMode ? '❌ Spam' : 'Spam ou publicidade' },
+                  { label: isChildMode ? 'ℹ️ Informação errada' : 'Informação falsa' },
+                  { label: isChildMode ? '🚷 Não é para crianças' : 'Conteúdo adulto' },
               ].map((reason, i) => (
                 <Button
-                  key={i} // <- AQUI estava o erro
+                  key={i} 
                   variant="outline"
                   className={`w-full justify-start rounded-full hover:bg-red-50 dark:hover:bg-red-900 ${isChildMode ? 'h-14 text-lg' : ''}`}
   >
-    {reason.label}
+   {reason.label}
   </Button>
 ))}
 
