@@ -2007,8 +2007,6 @@ const BottomTabBar: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>(mockPosts);
   const [searchQuery, setSearchQuery] = useState('');
   const [showCreateMenu, setShowCreateMenu] = useState(false);
-  const [showCreatePost, setShowCreatePost] = useState(false);
-  const [showCreateComment, setShowCreateComment] = useState(false);
   const createMenuRef = useRef<HTMLDivElement | null>(null); // para detectar clique fora
   const [selectedProfile, setSelectedProfile] = useState<User | null>(null);
   const [scanImage, setScanImage] = useState<string | null>(null);
@@ -2418,7 +2416,7 @@ const Header = () => (
                     className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-neutral-800"
                     onClick={() => {
                       setShowCreateMenu(false);
-                      setShowCreatePost(true);
+                      setShowCreatePostModal(true);
                     }}
                   >
                     Nova postagem (texto/foto)
